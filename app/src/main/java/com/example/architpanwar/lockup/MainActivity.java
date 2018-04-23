@@ -2,6 +2,7 @@ package com.example.architpanwar.lockup;
 
 
 
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -25,8 +26,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.architpanwar.lockup.Fragment.Allappfrag;
+import com.example.architpanwar.lockup.Fragment.passwordreset;
 import com.example.architpanwar.lockup.data.appi;
 
 import java.util.ArrayList;
@@ -44,7 +47,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        getSupportActionBar().setTitle("All Applications");
 
 //        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
 //            // Show alert dialog to the user saying a separate permission is needed
@@ -71,6 +74,9 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        Allappfrag f = Allappfrag.newinstanceapp(Constants.ALL_APPS);
+        frago.beginTransaction().replace(R.id.fragment_container, f).commit();
     }
 
     @Override
@@ -175,10 +181,15 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_manage) {
 
+            getSupportActionBar().setTitle("Change Password");
+            passwordreset f = passwordreset.newInstance();
+            frago.beginTransaction().replace(R.id.fragment_container, f).commit();
+
 
         }else if(id==R.id.auth){
-
-
+            final Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+            startActivity(intent);
+            Toast.makeText(getApplicationContext(), "If you have not allowed , allow App Lock so that it can work properly", Toast.LENGTH_LONG).show();
         }
         else if (id == R.id.nav_share) {
 
