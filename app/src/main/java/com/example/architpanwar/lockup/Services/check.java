@@ -1,5 +1,6 @@
 package com.example.architpanwar.lockup.Services;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Dialog;
 import android.app.Service;
@@ -120,6 +121,7 @@ public class check extends Service {
                 if (imageView != null) {
                     imageView.post(new Runnable() {
                         public void run() {
+
                             hideUnlockDialog();
                         }
                     });
@@ -217,6 +219,7 @@ public class check extends Service {
             }
         });
 
+        Log.d("ho raha hai kya show","good one boy");
         dialog.show();
 
     }
@@ -282,7 +285,7 @@ public class check extends Service {
         return false;
     }
 
-    @Override
+
     public void onDestroy() {
         super.onDestroy();
         timer.cancel();

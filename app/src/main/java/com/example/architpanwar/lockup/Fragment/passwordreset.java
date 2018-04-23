@@ -1,14 +1,15 @@
-package com.example.architpanwar.lockup;
+package com.example.architpanwar.lockup.Fragment;
 
+import android.support.v4.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,12 +17,18 @@ import android.widget.Toast;
 import com.andrognito.patternlockview.PatternLockView;
 import com.andrognito.patternlockview.listener.PatternLockViewListener;
 import com.andrognito.patternlockview.utils.PatternLockUtils;
+import com.example.architpanwar.lockup.Constants;
+import com.example.architpanwar.lockup.R;
+import com.example.architpanwar.lockup.password;
+import com.example.architpanwar.lockup.passwordrecoverset;
 
 import java.util.List;
 
-public class password extends AppCompatActivity {
+/**
+ * Created by architpanwar on 22/04/18.
+ */
 
-
+public class passwordreset extends Fragment {
 
     PatternLockView mpattern;
     //PatternLockViewListener mpattl;
@@ -33,31 +40,43 @@ public class password extends AppCompatActivity {
     SharedPreferences sharedPreference;
     SharedPreferences.Editor edit;
 
+    public static passwordreset newInstance() {
+        passwordreset f = new passwordreset();
+        return (f);
+    }
 
-
+    public passwordreset() {
+        super();
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_password);
-        ttv=(TextView)findViewById(R.id.abcd) ;
+    }
+
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState){
+
+
+        View v = inflater.inflate(R.layout.activity_password, container, false);
+
+        ttv=(TextView)v.findViewById(R.id.abcd) ;
         final String[] pass = new String[1];
 
 
 
-        sharedPreference=getSharedPreferences(Constants.MyPREFERENCES,MODE_PRIVATE);
+        sharedPreference=getActivity().getSharedPreferences(Constants.MyPREFERENCES, Context.MODE_PRIVATE);
         edit=sharedPreference.edit();
 
         String cond=sharedPreference.getString(Constants.PASSWORD,"ad");
-        Toast.makeText(getApplicationContext(),"new check "+cond,Toast.LENGTH_SHORT).show();
+       // Toast.makeText(getApplicationContext(),"new check "+cond,Toast.LENGTH_SHORT).show();
 
-    mpattern=(PatternLockView)findViewById(R.id.pattern_lock_view);
+        mpattern=(PatternLockView)v.findViewById(R.id.pattern_lock_view);
 
         first=false;
         second=false;
 
-        confirm=(Button)findViewById(R.id.confirm);
-        retry=(Button)findViewById(R.id.retry);
+        confirm=(Button)v.findViewById(R.id.confirm);
+        retry=(Button)v.findViewById(R.id.retry);
         confirm.setEnabled(false);
         retry.setEnabled(false);
         mpattern.setInStealthMode(true);
@@ -79,23 +98,23 @@ public class password extends AppCompatActivity {
             public void onComplete(List<PatternLockView.Dot> pattern) {
 
 
-    String sec;
+                String sec;
                 if(first==false)
                 {
-                    pass[0] =PatternLockUtils.patternToString(mpattern, pattern);
+                    pass[0] = PatternLockUtils.patternToString(mpattern, pattern);
                     first=true;
                     retry.setEnabled(true);
                 }
                 else if(PatternLockUtils.patternToString(mpattern, pattern).matches(pass[0])&&second==false)
                 {
                     second=true;
-                    Toast.makeText(getApplicationContext(),"Password matches",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(),"Password matches",Toast.LENGTH_SHORT).show();
                     confirm.setEnabled(true);
 
                 }
                 else
                 {
-                    Toast.makeText(getApplicationContext(),"Wrong password try again",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(),"Wrong password try again",Toast.LENGTH_SHORT).show();
                     first=false;
                     second=false;
                     retry.setEnabled(false);
@@ -117,16 +136,16 @@ public class password extends AppCompatActivity {
             public void onClick(View view) {
 
 
-              edit.putString(Constants.PASSWORD, pass[0]);
+                edit.putString(Constants.PASSWORD, pass[0]);
                 edit.putBoolean(Constants.IS_PASSWORD_SET,true);
-               edit.commit();
+                edit.commit();
 
 
                 //Toast.makeText(getApplicationContext(),"new check "+abc,Toast.LENGTH_SHORT).show();
 
-                Intent i=new Intent(password.this,passwordrecoverset.class);
-                startActivity(i);
-                finish();
+                Intent i=new Intent(getActivity(),passwordrecoverset.class);
+                getActivity().startActivity(i);
+                getActivity().finish();
 
             }
         });
@@ -145,8 +164,8 @@ public class password extends AppCompatActivity {
 
 
 
+
+
+        return v;
     }
-
-
-
 }
